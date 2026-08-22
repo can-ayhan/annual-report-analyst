@@ -1,0 +1,33 @@
+# The annual reports the system indexes. The PDFs are not in the repository:
+# `analyst fetch` downloads them from the publishers and checks each against its sha256.
+# `pages` is the number of pages in the PDF; citations use the position in the PDF,
+# which is what a PDF viewer shows, not the number printed on the page.
+reports:
+  - id: cdprojekt-2024
+    company: CD PROJEKT
+    fiscal_year: 2024
+    title: "Management Board report on CD PROJEKT Group activities in 2024"
+    url: https://www.cdprojekt.com/en/wp-content/uploads-en/2025/03/management-board-report-on-cd-projekt-group-activities-in-2024.pdf
+    sha256: 535c3b1a49691ffec343a94831d1e794fa0842c00751ff273b350f4f3a70525e
+    pages: 146
+  - id: cdprojekt-2025
+    company: CD PROJEKT
+    fiscal_year: 2025
+    title: "Management Board report on CD PROJEKT Group activities in 2025"
+    url: https://www.cdprojekt.com/en/wp-content/uploads-en/2026/03/management-board-report-on-cd-projekt-group-activities-in-2025.pdf
+    sha256: f35a47c299e61efd577f3c3c67c1ddac5009aa4b46988dfba5ecf333fbd328c2
+    pages: 154
+  - id: dino-2025
+    company: Dino Polska
+    fiscal_year: 2025
+    title: "Management Board's activity report of Dino Polska S.A. and the Dino Polska Group for 2025"
+    url: https://grupadino.pl/wp-content/uploads/2026/03/Dino-Polska-Management-Boards-Activity-Report-for-2025.pdf
+    sha256: ef531ff4087e10695326dca40bd5920b76b20b8f9e27ddaaabd1b5c66cbe37bd
+    pages: 103
+  - id: inpost-2025
+    company: InPost
+    fiscal_year: 2025
+    title: "InPost Group Integrated Annual Report 2025"
+    url: https://inpost.eu/sites/default/files/2026-03/InPost_Group_IAR_2025_0_0.pdf
+    sha256: f3d779eb05a147e724bbb7593368ad8ffe894f320663737e26bea85e17050c0b
+    pages: 289
