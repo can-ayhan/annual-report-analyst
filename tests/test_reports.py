@@ -4,6 +4,7 @@ from dataclasses import replace
 
 import pytest
 
+from analyst.pdf import clean, page_texts
 from analyst.reports import ChecksumMismatch, fetch, load_reports
 from fakes import SAMPLE_REPORT
 
@@ -58,3 +59,16 @@ def test_a_changed_file_is_refused(tmp_path):
     with pytest.raises(ChecksumMismatch, match="baltic-2025"):
         fetch(report, tmp_path, opener=lambda request, timeout: FakeResponse(b"something else"))
     assert not report.path(tmp_path).exists()
+
+
+def test_pages_come_out_in_order_with_their_text(sample_pdf):
+    pages = page_texts(sample_pdf)
+    assert len(pages) == 3
+    assert "412 bakeries" in pages[0]
+    assert "Sales revenue 1 250 400 1 100 200" in pages[1]
+    assert "PLN 2.50 per share" in pages[2]
+
+
+def test_clean_keeps_the_words_and_drops_the_noise():
+    assert clean("Sales\u00a0revenue   866 989  \n\n\n\nNet  profit\t520 869 ") == "Sales revenue 866 989\n\nNet profit 520 869"
+    assert clean("invest-\u00adment") == "invest-ment"
