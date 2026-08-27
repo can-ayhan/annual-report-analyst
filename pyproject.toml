@@ -8,6 +8,9 @@ version = "0.1.0"
 description = "Multi-agent question answering over public company annual reports, with the page behind every claim"
 requires-python = ">=3.11"
 dependencies = [
+    "fastembed>=0.8",
+    "pgvector>=0.5",
+    "psycopg[binary]>=3.2",
     "pymupdf>=1.26",
     "pyyaml>=6.0",
 ]
