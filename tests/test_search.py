@@ -1,6 +1,7 @@
 import math
 
 from analyst.embeddings import HashingEmbedder
+from analyst.search import word_query
 
 
 def cosine(a: list[float], b: list[float]) -> float:
@@ -19,6 +20,11 @@ def test_texts_that_share_words_are_closer():
     query = embedder.query("dividend per share")
     close, far = embedder.passages(["a dividend of PLN 2.50 per share", "the Group operated 412 bakeries"])
     assert cosine(query, close) > cosine(query, far)
+
+
+def test_word_query_is_an_or_of_distinct_words():
+    assert word_query("How many stores, and how many NEW stores?") == "how | many | stores | and | new"
+    assert word_query("?!") == ""
 
 
 def test_the_page_with_the_words_comes_first(search):

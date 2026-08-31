@@ -28,8 +28,10 @@ create table if not exists passage (
     position    integer not null,         -- order of the passage on its page
     text        text not null,
     embedding   vector(384) not null,
+    tsv         tsvector generated always as (to_tsvector('english', text)) stored,
     unique (report_id, page_no, position),
     foreign key (report_id, page_no) references page on delete cascade
 );
 
 create index if not exists passage_embedding_idx on passage using hnsw (embedding vector_cosine_ops);
+create index if not exists passage_tsv_idx on passage using gin (tsv);
