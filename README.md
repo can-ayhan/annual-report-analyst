@@ -13,6 +13,19 @@ answer and check it, and refuse to state anything a retrieved passage does not b
 4. The search and page tools as an MCP server
 5. An evaluation: questions with known answers, several models
 
+## Running it
+
+```
+python -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+docker compose up -d              # PostgreSQL with pgvector on localhost:5436
+analyst fetch                     # download the reports in data/reports.yml and check their checksums
+analyst index                     # extract, split, embed and store them (about ten minutes on a laptop CPU)
+analyst search "number of stores" --company "Dino Polska"
+```
+
+The embeddings come from a small model that runs locally, so nothing here needs a key.
+
 ## Status
 
-Work in progress.
+Work in progress: steps 1 and 2 are done.
