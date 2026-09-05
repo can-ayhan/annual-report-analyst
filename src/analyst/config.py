@@ -37,3 +37,11 @@ def database_conninfo() -> str:
 
 def embedding_model() -> str:
     return os.environ.get("EMBEDDING_MODEL") or DEFAULT_EMBEDDING_MODEL
+
+
+def chat_model() -> str:
+    """The Groq model the agents use. There is no default: models come and go, so the choice is explicit."""
+    model = os.environ.get("ANALYST_MODEL")
+    if not model:
+        raise SystemExit("ANALYST_MODEL is not set. Put the id of a Groq chat model with tool use in .env.")
+    return model

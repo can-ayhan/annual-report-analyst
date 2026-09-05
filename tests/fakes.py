@@ -1,11 +1,13 @@
-"""Stand-ins for the tests: a small made-up annual report."""
+"""Stand-ins for the tests: a chat model that answers from a script, and a small made-up annual report."""
 
 from __future__ import annotations
 
 from pathlib import Path
 
 import pymupdf
+from pydantic import BaseModel
 
+from analyst.llm import Call
 from analyst.reports import Report
 
 SAMPLE_PAGES = [
@@ -40,3 +42,25 @@ def write_sample_pdf(path: Path, pages: list[str] = SAMPLE_PAGES) -> Path:
     document.save(path)
     document.close()
     return path
+
+
+class ScriptedChat:
+    """Answers each agent from a list prepared by the test, in order, and remembers what it was asked."""
+
+    model = "scripted"
+
+    def __init__(self, **answers: list[BaseModel]):
+        self.answers = {agent: list(replies) for agent, replies in answers.items()}
+        self.asked: list[tuple[str, str]] = []           # (agent, user message)
+
+    def structured(self, agent: str, system: str, user: str, schema: type[BaseModel]):
+        self.asked.append((agent, user))
+        replies = self.answers.get(agent)
+        if not replies:
+            raise AssertionError(f"the test did not expect a call from the {agent}")
+        reply = replies.pop(0)
+        assert isinstance(reply, schema), f"{agent} wants {schema.__name__}, the script has {type(reply).__name__}"
+        return reply, Call(agent, self.model, prompt_tokens=100, completion_tokens=20, seconds=0.5)
+
+    def calls_from(self, agent: str) -> int:
+        return sum(1 for asked, _ in self.asked if asked == agent)
