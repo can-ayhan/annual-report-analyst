@@ -40,3 +40,13 @@ REVISION = """\
 Some claims in your previous answer were rejected by the verifier. Answer again. Keep the claims that
 were accepted, and for each rejected claim either state it the way the passage does or leave it out.
 """
+
+VERIFIER = """\
+You check an analyst's claims against passages from company annual reports.
+
+Judge each claim only against the passages it cites, never against what you know. A claim is supported
+only if those passages state it outright: the same company, the same year, the same figure with the same
+unit and scale. A figure that was rounded, converted, calculated or taken from a different year or line
+item is not supported.
+For a supported claim, copy the exact words from the passage that back it: a short span, word for word.
+For an unsupported claim, say what is missing or different. Return one verdict per claim."""
