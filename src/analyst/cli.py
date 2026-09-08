@@ -3,6 +3,7 @@
     analyst fetch                      download the reports listed in data/reports.yml
     analyst index                      extract, split, embed and store them
     analyst search "store count"       try the retrieval on its own
+    analyst ask "How many ...?"        run the agents on a question
 """
 
 from __future__ import annotations
@@ -22,6 +23,12 @@ def _search():
     conn = db.connect()
     db.ensure_schema(conn)
     return ReportSearch(conn, FastEmbedEmbedder())
+
+
+def _chat(model: str):
+    from analyst.llm import GroqChat
+
+    return GroqChat(model)
 
 
 def cmd_fetch(args) -> int:
@@ -58,6 +65,26 @@ def cmd_search(args) -> int:
     return 0
 
 
+def cmd_ask(args) -> int:
+    from analyst.graph import ask
+
+    llm = _chat(config.chat_model())
+    state = ask(args.question, llm, _search(), args.variant)
+    if args.trace:
+        print("searches:")
+        for search in state.get("searches_run", []):
+            print(f"  {search.query!r}  company={search.company}  year={search.fiscal_year}")
+        print("passages:", ", ".join(f"{p.label} {p.citation}" for p in state.get("passages", [])))
+        for claim in state.get("checked", []):
+            mark = "accepted" if claim.supported else f"rejected ({claim.reason})"
+            print(f"  {mark}: {claim.text}")
+        usage = state["usage"]
+        print(f"{usage['calls']} model calls, {usage['prompt_tokens'] + usage['completion_tokens']} tokens, "
+              f"{state['seconds']} s\n")
+    print(state["answer"].text)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="analyst", description="Questions over company annual reports")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -74,6 +101,12 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--year", type=int)
     p.add_argument("-k", "--limit", type=int, default=5)
     p.set_defaults(func=cmd_search)
+
+    p = sub.add_parser("ask", help="answer a question with citations")
+    p.add_argument("question")
+    p.add_argument("--variant", default="baseline", help="analyst prompt to use, see agents/prompts.py")
+    p.add_argument("--trace", action="store_true", help="show searches, passages and verdicts")
+    p.set_defaults(func=cmd_ask)
 
     return parser
 
