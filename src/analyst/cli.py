@@ -4,6 +4,7 @@
     analyst index                      extract, split, embed and store them
     analyst search "store count"       try the retrieval on its own
     analyst ask "How many ...?"        run the agents on a question
+    analyst mcp                        serve the report tools over MCP (stdio)
 """
 
 from __future__ import annotations
@@ -85,6 +86,13 @@ def cmd_ask(args) -> int:
     return 0
 
 
+def cmd_mcp(args) -> int:
+    from analyst import mcp_server
+
+    mcp_server.main()
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="analyst", description="Questions over company annual reports")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -108,16 +116,18 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--trace", action="store_true", help="show searches, passages and verdicts")
     p.set_defaults(func=cmd_ask)
 
+    sub.add_parser("mcp", help="serve the report tools over MCP (stdio)").set_defaults(func=cmd_mcp)
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     config.load_dotenv()
     args = build_parser().parse_args(argv)
-    logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s %(message)s")
-    for stream in (sys.stdout, sys.stderr):
-        if hasattr(stream, "reconfigure"):
-            stream.reconfigure(encoding="utf-8", errors="replace")
+    if args.command != "mcp":           # the MCP server owns stdout; everything else may print
+        logging.basicConfig(level=logging.WARNING, format="%(levelname)s %(name)s %(message)s")
+        for stream in (sys.stdout, sys.stderr):
+            if hasattr(stream, "reconfigure"):
+                stream.reconfigure(encoding="utf-8", errors="replace")
     return args.func(args)
 
 

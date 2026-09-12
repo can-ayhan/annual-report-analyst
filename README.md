@@ -37,6 +37,12 @@ Four agents work on it in a LangGraph graph: a planner turns the question into s
 runs them and decides whether the results are enough, an analyst writes the answer as claims with
 the passages they come from, and a verifier rejects every claim that its passages do not back.
 
+The same search and page tools are available to any MCP client:
+
+```
+analyst mcp                       # serves list_reports, search_reports and get_page over stdio
+```
+
 ## Status
 
-Work in progress: steps 1 to 3 are done.
+Work in progress: steps 1 to 4 are done.
