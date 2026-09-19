@@ -1,0 +1,96 @@
+# Questions with known answers, written by reading the reports.
+#
+# expect    every group must be found in the answer; a group lists the accepted ways
+#           of writing the same thing (figures are compared without thousands separators)
+# pages     per report, every PDF page that states the answer; the answer must cite
+#           at least one of them for each report listed
+# no_answer the library does not hold the answer and the system should say so
+
+questions:
+  - id: dino-stores
+    question: How many stores did Dino Polska have at the end of 2025?
+    expect: [["3,033"]]
+    pages: {dino-2025: [4, 7, 8, 10, 23, 48, 55, 81]}
+
+  - id: dino-openings
+    question: How many new stores did Dino Polska open in 2025?
+    expect: [["345"]]
+    pages: {dino-2025: [4, 10, 49]}
+
+  - id: dino-revenue
+    question: What was the Dino Polska Group's sales revenue in 2025?
+    expect: [["33,634,155", "33,634.2", "33.6 billion"]]
+    pages: {dino-2025: [5, 14, 66]}
+
+  - id: dino-ebitda
+    question: What was the Dino Polska Group's EBITDA in 2025, and what was its EBITDA margin?
+    expect: [["2,546.3"], ["7.6"]]
+    pages: {dino-2025: [16]}
+
+  - id: dino-employees
+    question: How many employees did the Dino Polska Group have at the end of 2025?
+    expect: [["55,856"]]
+    pages: {dino-2025: [15, 49, 54, 81, 82]}
+
+  - id: dino-dividend
+    question: Does Dino Polska's Management Board plan to recommend a dividend for 2025?
+    expect: [["does not plan", "not plan to recommend", "no dividend", "will not", "not recommend"]]
+    pages: {dino-2025: [22]}
+
+  - id: inpost-volume
+    question: How many parcels did InPost Group handle in 2025?
+    expect: [["1.4 billion", "1.4 bn", "1,364.8"]]
+    pages: {inpost-2025: [8, 9, 29, 36, 173]}
+
+  - id: inpost-employees
+    question: How many employees did InPost Group have at 31 December 2025?
+    expect: [["13,419"]]
+    pages: {inpost-2025: [73, 190, 287]}
+
+  - id: inpost-revenue
+    question: What was InPost Group's revenue for the twelve months of 2025?
+    expect: [["14,711.2"]]
+    pages: {inpost-2025: [9, 36, 74, 119, 157, 220, 233, 234, 235, 236, 240]}
+
+  - id: inpost-uk-lockers
+    question: How many lockers did InPost have in the UK at the end of 2025?
+    expect: [["13,721"]]
+    pages: {inpost-2025: [6, 10, 29, 32]}
+
+  - id: inpost-fcf
+    question: What was InPost Group's free cash flow in 2025, and what was it in 2024?
+    expect: [["84.1"], ["934.5"]]
+    pages: {inpost-2025: [36, 38, 234]}
+
+  - id: cdp-revenue
+    question: What sales revenue does the consolidated income statement of the CD PROJEKT Group show for 2025?
+    expect: [["866 989", "867.0 million", "867 million"]]
+    pages: {cdprojekt-2025: [33]}
+
+  - id: cdp-margin
+    question: What was the CD PROJEKT Group's net profit margin in 2025, and what was it in 2024?
+    expect: [["60.1"], ["55.5"]]
+    pages: {cdprojekt-2025: [36]}
+
+  - id: cdp-cyberpunk
+    question: How many copies of Cyberpunk 2077 had been sold by November 2025?
+    expect: [["35 million"]]
+    pages: {cdprojekt-2025: [3, 6, 18]}
+
+  - id: cdp-2024-profit
+    question: What net profit did CD PROJEKT S.A., the parent company, report for 2024 in its 2024 report?
+    expect: [["470 674"]]
+    pages: {cdprojekt-2024: [38, 39, 45, 49]}
+
+  - id: cross-employees
+    question: Which had more employees at the end of 2025, the Dino Polska Group or InPost Group, and how many did each have?
+    expect: [["55,856"], ["13,419"]]
+    pages: {dino-2025: [15, 49, 54, 81, 82], inpost-2025: [73, 190, 287]}
+
+  - id: missing-allegro
+    question: What was Allegro's gross merchandise value in 2025?
+    no_answer: true
+
+  - id: missing-lpp
+    question: How many stores did LPP operate at the end of 2025?
+    no_answer: true

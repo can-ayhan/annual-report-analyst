@@ -4,6 +4,8 @@
     analyst index                      extract, split, embed and store them
     analyst search "store count"       try the retrieval on its own
     analyst ask "How many ...?"        run the agents on a question
+    analyst eval --model NAME          run the question set
+    analyst report                     table of all saved evaluation runs
     analyst mcp                        serve the report tools over MCP (stdio)
 """
 
@@ -26,10 +28,13 @@ def _search():
     return ReportSearch(conn, FastEmbedEmbedder())
 
 
-def _chat(model: str):
+def _chat(model: str, cache: bool):
+    from analyst.evaluation import ModelSpec, load_models
     from analyst.llm import GroqChat
 
-    return GroqChat(model)
+    spec = load_models().get(model) or ModelSpec(name=model)
+    cache_dir = config.ROOT / ".cache" / "llm" if cache else None
+    return GroqChat(model, cache_dir=cache_dir, options=spec.options), spec
 
 
 def cmd_fetch(args) -> int:
@@ -69,7 +74,7 @@ def cmd_search(args) -> int:
 def cmd_ask(args) -> int:
     from analyst.graph import ask
 
-    llm = _chat(config.chat_model())
+    llm, _ = _chat(config.chat_model(), cache=False)
     state = ask(args.question, llm, _search(), args.variant)
     if args.trace:
         print("searches:")
@@ -83,6 +88,42 @@ def cmd_ask(args) -> int:
         print(f"{usage['calls']} model calls, {usage['prompt_tokens'] + usage['completion_tokens']} tokens, "
               f"{state['seconds']} s\n")
     print(state["answer"].text)
+    return 0
+
+
+def cmd_eval(args) -> int:
+    from analyst import evaluation
+
+    model = args.model or config.chat_model()
+    llm, spec = _chat(model, cache=not args.no_cache)
+    questions = [q for q in evaluation.load_questions() if not args.only or q.id in args.only]
+
+    def show(row: dict) -> None:
+        mark = "ok  " if row["correct"] else "MISS"
+        cited = {True: "page ok", False: "page MISS", None: ""}[row["cited"]]
+        tokens = row["prompt_tokens"] + row["completion_tokens"]
+        print(f"{mark} {row['id']:<18} {cited:<9} {tokens:>6} tokens {row['model_seconds']:>5.1f} s  "
+              f"{row['answer'][:90]!r}", flush=True)
+
+    result = evaluation.evaluate(llm, _search(), args.variant, spec, questions, on_row=show)
+    summary = result["summary"]
+    print(f"\n{summary['model']} / {summary['variant']}: "
+          f"{summary['correct']}/{summary['questions']} correct, "
+          f"{summary['cited']}/{summary['answerable']} with the right page, "
+          f"{summary['tokens_per_question']} tokens and {summary['median_seconds']} s per question, "
+          f"${summary['cost_per_100_questions_usd']} per 100 questions at list price")
+    if "stopped" in result:
+        print(f"stopped early: {result['stopped']}")
+        return 1
+    if not args.only:
+        print("saved to", evaluation.save(result))
+    return 0
+
+
+def cmd_report(args) -> int:
+    from analyst import evaluation
+
+    print(evaluation.comparison_table())
     return 0
 
 
@@ -116,6 +157,14 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--trace", action="store_true", help="show searches, passages and verdicts")
     p.set_defaults(func=cmd_ask)
 
+    p = sub.add_parser("eval", help="run the question set")
+    p.add_argument("--model", help="default: ANALYST_MODEL")
+    p.add_argument("--variant", default="baseline")
+    p.add_argument("--only", nargs="*", help="question ids; nothing is saved for a partial run")
+    p.add_argument("--no-cache", action="store_true", help="do not replay identical model calls from .cache")
+    p.set_defaults(func=cmd_eval)
+
+    sub.add_parser("report", help="table of saved evaluation runs").set_defaults(func=cmd_report)
     sub.add_parser("mcp", help="serve the report tools over MCP (stdio)").set_defaults(func=cmd_mcp)
     return parser
 
