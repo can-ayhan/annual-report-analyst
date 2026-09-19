@@ -1,0 +1,21 @@
+# The models that were compared. This file is the only place a chat model is named.
+#
+# prices   US dollars per million tokens, the provider's list price. The free tier
+#          costs nothing; the prices say what the same traffic would cost when paid for.
+# options  extra request fields for that model
+
+models:
+  openai/gpt-oss-120b:
+    input_per_mtok: 0.15
+    output_per_mtok: 0.60
+    options: {reasoning_effort: low}
+
+  openai/gpt-oss-20b:
+    input_per_mtok: 0.075
+    output_per_mtok: 0.30
+    options: {reasoning_effort: low}
+
+  qwen/qwen3.8-27b:
+    input_per_mtok: 0.80
+    output_per_mtok: 4.00
+    options: {reasoning_effort: none}

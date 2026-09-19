@@ -4,7 +4,7 @@ import pytest
 
 from analyst import evaluation
 from analyst.agents.state import Answer, AnswerClaim, Checked, Citation
-from analyst.evaluation import ModelSpec, Question, load_questions, score, summarise
+from analyst.evaluation import ModelSpec, Question, load_models, load_questions, score, summarise
 from analyst.reports import load_reports
 
 
@@ -118,3 +118,10 @@ def test_the_set_has_questions_the_library_cannot_answer_and_ones_that_need_two_
     questions = load_questions()
     assert sum(q.no_answer for q in questions) >= 2
     assert any(len(q.pages) > 1 for q in questions)
+
+
+def test_compared_models_have_prices():
+    models = load_models()
+    assert len(models) == 3
+    for spec in models.values():
+        assert 0 < spec.input_per_mtok < spec.output_per_mtok
