@@ -49,17 +49,30 @@ class ChatModel(Protocol):
 
 
 def tool_schema(schema: type[BaseModel]) -> dict:
-    """The JSON schema of a model with $ref inlined and titles dropped: smaller, and self-contained."""
+    """The JSON schema of a model in the plainest form that says the same thing.
+
+    Pydantic writes references, titles, defaults and `anyOf` for optional fields. Not every
+    model produces a parsable tool call from that, so: references are inlined, titles and
+    defaults dropped, "X or null" written as a type list, and every property is required
+    (an optional one may be null).
+    """
     raw = schema.model_json_schema()
     definitions = raw.pop("$defs", {})
 
     def resolve(node):
-        if isinstance(node, dict):
-            if "$ref" in node:
-                return resolve(definitions[node["$ref"].rsplit("/", 1)[-1]])
-            return {key: resolve(value) for key, value in node.items() if key != "title"}
         if isinstance(node, list):
             return [resolve(item) for item in node]
+        if not isinstance(node, dict):
+            return node
+        if "$ref" in node:
+            return resolve(definitions[node["$ref"].rsplit("/", 1)[-1]])
+        node = {key: resolve(value) for key, value in node.items() if key not in ("title", "default")}
+        options = node.get("anyOf")
+        if options and all(set(option) == {"type"} for option in options):
+            node.pop("anyOf")
+            node["type"] = [option["type"] for option in options]
+        if "properties" in node:
+            node["required"] = list(node["properties"])
         return node
 
     return resolve(raw)

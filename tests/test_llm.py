@@ -6,8 +6,8 @@ import httpx
 import pytest
 
 from analyst import llm as llm_module
-from analyst.agents.state import Plan
-from analyst.llm import GroqChat, LLMError, totals
+from analyst.agents.state import Plan, Verification
+from analyst.llm import GroqChat, LLMError, tool_schema, totals
 
 GOOD = json.dumps({"searches": [{"query": "sales revenue", "company": "CD PROJEKT", "fiscal_year": 2025}]})
 
@@ -46,6 +46,21 @@ def no_sleep(monkeypatch):
     slept = []
     monkeypatch.setattr(llm_module.time, "sleep", slept.append)
     return slept
+
+
+# -- the schema that is sent ---------------------------------------------------------------------------
+
+def test_schema_has_no_references_titles_or_defaults():
+    text = json.dumps(tool_schema(Verification))
+    assert "$ref" not in text and "$defs" not in text and '"title"' not in text and '"default"' not in text
+
+
+def test_optional_fields_are_a_type_list_and_everything_is_required():
+    search = tool_schema(Plan)["properties"]["searches"]["items"]
+    assert search["properties"]["company"]["type"] == ["string", "null"]
+    assert search["properties"]["fiscal_year"]["type"] == ["integer", "null"]
+    assert search["required"] == ["query", "company", "fiscal_year"]
+    assert "anyOf" not in json.dumps(search)
 
 
 # -- one call ------------------------------------------------------------------------------------------
