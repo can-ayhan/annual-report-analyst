@@ -131,18 +131,29 @@ class GroqChat:
     # -- the request, with patience for rate limits ----------------------------------------------
 
     def _request(self, messages: list[dict], parameters: dict):
-        """One reply as (JSON text, usage, seconds the model took)."""
+        """One reply as (JSON text, usage, seconds the model took).
+
+        The result is asked for as a forced tool call. If the model fails to produce a
+        parsable call twice, the same schema is asked for as a JSON response instead:
+        with reasoning models the tool call sometimes comes out as prose.
+        """
         import groq
 
-        tool = {"type": "function", "function": {
-            "name": "submit", "description": "Hand in the result.", "parameters": parameters}}
+        as_tool = {
+            "tools": [{"type": "function", "function": {
+                "name": "submit", "description": "Hand in the result.", "parameters": parameters}}],
+            "tool_choice": {"type": "function", "function": {"name": "submit"}},
+        }
+        as_json = {"response_format": {"type": "json_schema",
+                                       "json_schema": {"name": "result", "schema": parameters}}}
+        generation_failures = 0
         for attempt in range(1, self.max_attempts + 1):
+            how = as_tool if generation_failures < 2 else as_json
             started = time.perf_counter()
             try:
                 response = self.client.chat.completions.create(
-                    model=self.model, messages=messages, tools=[tool],
-                    tool_choice={"type": "function", "function": {"name": "submit"}},
-                    temperature=0, max_completion_tokens=MAX_OUTPUT_TOKENS, **self.options,
+                    model=self.model, messages=messages, temperature=0,
+                    max_completion_tokens=MAX_OUTPUT_TOKENS, **how, **self.options,
                 )
             except groq.RateLimitError as exc:
                 wait = float(exc.response.headers.get("retry-after", 10))
@@ -150,18 +161,25 @@ class GroqChat:
                     raise LLMError(f"{self.model}: rate limit, retry after {wait:.0f} s: {exc}") from exc
                 log.info("rate limit on %s, waiting %.0f s", self.model, wait)
                 time.sleep(wait + 0.5)
-            except (groq.BadRequestError, groq.APIConnectionError, groq.InternalServerError) as exc:
-                # a malformed tool call is reported as a 400; it usually goes away on a second try
-                if attempt == self.max_attempts or (isinstance(exc, groq.BadRequestError)
-                                                    and "tool" not in str(exc).lower()):
+            except groq.BadRequestError as exc:
+                # "failed_generation": the request was fine, the model's output could not be parsed
+                if "failed_generation" not in str(exc) or attempt == self.max_attempts:
+                    raise LLMError(f"{self.model}: {exc}") from exc
+                generation_failures += 1
+                log.info("%s produced an unparsable reply (%s so far)", self.model, generation_failures)
+            except (groq.APIConnectionError, groq.InternalServerError) as exc:
+                if attempt == self.max_attempts:
                     raise LLMError(f"{self.model}: {exc}") from exc
                 time.sleep(2)
             else:
-                calls = response.choices[0].message.tool_calls
-                if calls:
-                    return calls[0].function.arguments, response.usage, time.perf_counter() - started
-                messages = messages + [{"role": "user", "content": "Call the submit function."}]
-        raise LLMError(f"{self.model}: no tool call after {self.max_attempts} attempts")
+                message = response.choices[0].message
+                took = time.perf_counter() - started
+                if message.tool_calls:
+                    return message.tool_calls[0].function.arguments, response.usage, took
+                if how is as_json and message.content:
+                    return message.content, response.usage, took
+                generation_failures += 1
+        raise LLMError(f"{self.model}: no usable reply after {self.max_attempts} attempts")
 
     # -- cache -------------------------------------------------------------------------------------
 

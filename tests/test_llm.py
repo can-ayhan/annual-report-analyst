@@ -96,6 +96,45 @@ def test_two_bad_replies_are_an_error():
         GroqChat("some-model", client=client).structured("planner", "system", "user", Plan)
 
 
+# -- replies the provider could not parse --------------------------------------------------------------
+
+def unparsable():
+    request = httpx.Request("POST", "https://api.groq.com/openai/v1/chat/completions")
+    body = {"error": {"message": "Parsing failed.", "code": "output_parse_failed",
+                      "failed_generation": "We need claim: number of employees ..."}}
+    return groq.BadRequestError(f"Error code: 400 - {body}", response=httpx.Response(400, request=request), body=body)
+
+
+def json_reply(content: str):
+    message = SimpleNamespace(tool_calls=None, content=content)
+    usage = SimpleNamespace(prompt_tokens=200, completion_tokens=30)
+    return SimpleNamespace(choices=[SimpleNamespace(message=message)], usage=usage)
+
+
+def test_an_unparsable_tool_call_is_tried_again():
+    client = FakeClient(unparsable(), reply(GOOD))
+    plan, _ = GroqChat("some-model", client=client).structured("planner", "system", "user", Plan)
+    assert plan.searches and "tools" in client.requests[1]
+
+
+def test_after_two_unparsable_tool_calls_the_schema_is_asked_for_as_json():
+    client = FakeClient(unparsable(), unparsable(), json_reply(GOOD))
+    plan, _ = GroqChat("some-model", client=client).structured("planner", "system", "user", Plan)
+    assert plan.searches[0].query == "sales revenue"
+    last = client.requests[2]
+    assert "tools" not in last and last["response_format"]["type"] == "json_schema"
+    assert last["response_format"]["json_schema"]["schema"] == tool_schema(Plan)
+
+
+def test_another_kind_of_bad_request_is_not_retried():
+    request = httpx.Request("POST", "https://api.groq.com/openai/v1/chat/completions")
+    error = groq.BadRequestError("model not found", response=httpx.Response(400, request=request), body=None)
+    client = FakeClient(error)
+    with pytest.raises(LLMError, match="model not found"):
+        GroqChat("some-model", client=client).structured("planner", "system", "user", Plan)
+    assert len(client.requests) == 1
+
+
 # -- rate limits ---------------------------------------------------------------------------------------
 
 def test_a_short_rate_limit_is_waited_out(no_sleep):
