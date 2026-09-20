@@ -21,6 +21,7 @@ from analyst.llm import ChatModel
 MIN_QUOTE = 10          # characters; shorter "quotes" prove nothing
 
 _SEPARATOR_IN_NUMBER = re.compile(r"(?<=\d)[ ,\u00a0\u202f](?=\d)")
+_COMMA_IN_NUMBER = re.compile(r"(?<=\d),(?=\d)")
 _NUMBER = re.compile(r"\d+(?:\.\d+)?")
 _YEAR = re.compile(r"(?:19|20)\d\d")
 
@@ -42,14 +43,51 @@ def normalise(text: str) -> str:
     return " ".join(text.lower().replace("’", "'").replace("“", '"').replace("”", '"').split())
 
 
+def words(text: str) -> list[str]:
+    """Lower-case words and numbers. 3,033 becomes one word; 866 989 stays two, as it is in the tables."""
+    return re.findall(r"[a-z0-9]+(?:\.[0-9]+)?%?", _COMMA_IN_NUMBER.sub("", normalise(text)))
+
+
+def quote_parts(quote: str) -> list[list[str]]:
+    """The quote as runs of words; an ellipsis in the quote separates the runs."""
+    parts = [words(part) for part in re.split(r"\.{3}|…", quote)]
+    return [part for part in parts if part]
+
+
+def long_enough(quote: str) -> bool:
+    wanted = [word for part in quote_parts(quote) for word in part]
+    return len(wanted) >= 2 and sum(len(word) for word in wanted) >= MIN_QUOTE
+
+
 def quote_found(quote: str, sources: list[Passage]) -> bool:
-    """True if every part of the quote (parts are separated by ...) occurs word for word in one source."""
-    parts = [part.strip(" \"'.,;:") for part in re.split(r"\.{3}|…", normalise(quote))]
-    parts = [part for part in parts if part]
-    if not parts or sum(len(part) for part in parts) < MIN_QUOTE:
+    """True if the words of the quote occur in the sources, in the same order and close together.
+
+    Close together rather than adjacent because of tables: a row reads
+    "Total headcount 49,887 55,856" and an honest quote for the second column is
+    "Total headcount 55,856". Where the quote marks an omission with an ellipsis,
+    each part is looked for on its own. Words that are not there, or that are there
+    in another order, do not pass.
+    """
+    if not long_enough(quote):
         return False
-    texts = [normalise(source.text) for source in sources]
-    return all(any(part in text for text in texts) for part in parts)
+    have = [words(source.text) for source in sources]
+    return all(any(_run_found(part, text) for text in have) for part in quote_parts(quote))
+
+
+def _run_found(wanted: list[str], have: list[str]) -> bool:
+    allowed_span = 2 * len(wanted) + 4
+    for start, word in enumerate(have):
+        if word != wanted[0]:
+            continue
+        position = start
+        for needed in wanted[1:]:
+            try:
+                position = have.index(needed, position + 1, start + allowed_span)
+            except ValueError:
+                break
+        else:
+            return True
+    return False
 
 
 def problem_without_model(claim: Claim, by_label: dict[str, Passage]) -> str:
@@ -98,8 +136,13 @@ def make_verifier(llm: ChatModel):
                     checked[position].reason = "the verifier gave no verdict"
                 elif not verdict.supported:
                     checked[position].reason = verdict.reason or "not stated in the cited passages"
+                elif not long_enough(verdict.quote):
+                    checked[position].reason = (
+                        f"accepted on the strength of {verdict.quote[:80]!r} alone, "
+                        "which is too short to show what the figure refers to")
                 elif not quote_found(verdict.quote, [by_label[label] for label in claim.sources]):
-                    checked[position].reason = "accepted, but the quoted words are not in the passage"
+                    checked[position].reason = (
+                        f"accepted on the strength of {verdict.quote[:80]!r}, which is not in the passage")
                 else:
                     checked[position].supported = True
                     checked[position].quote = verdict.quote

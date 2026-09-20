@@ -79,6 +79,19 @@ def test_words_from_the_passage_are_accepted(quote):
     assert quote_found(quote, [PROSE])
 
 
+def test_a_table_cell_can_be_quoted_with_its_row_label():
+    assert quote_found("Total headcount 55,856", [TABLE])            # skips the 2024 column
+    assert quote_found("Total headcount\n49,887 55,856", [TABLE])
+    assert quote_found("Sales revenue 866 989", [THOUSANDS])
+
+
+def test_an_ellipsis_separates_parts_that_are_each_looked_for():
+    assert quote_found("Total headcount ... 2025 ... 55,856", [TABLE])        # row label, column, value
+    assert quote_found("the Group operated 412 bakeries … a year earlier", [PROSE])
+    assert not quote_found("Total headcount ... 2026 ... 55,856", [TABLE])    # one part is not in the passage
+    assert quote_found("Total headcount 55,856 ... the Group operated 412 bakeries", [TABLE, PROSE])
+
+
 @pytest.mark.parametrize("quote", [
     "the Group operated 500 bakeries",              # a word that is not there
     "bakeries operated Group the",                  # there, in another order
@@ -120,6 +133,12 @@ def test_an_acceptance_without_real_words_is_overruled():
         Verdict(claim=1, supported=True, quote="Baltic Mills is the largest bakery group")])])
     [checked] = verify(Draft(claims=[Claim(text="Baltic Mills operated 412 bakeries.", sources=["P2"])]), llm)
     assert not checked.supported and "not in the passage" in checked.reason
+
+
+def test_a_bare_figure_is_not_a_quote():
+    llm = ScriptedChat(verifier=[Verification(verdicts=[Verdict(claim=1, supported=True, quote="412")])])
+    [checked] = verify(Draft(claims=[Claim(text="Baltic Mills operated 412 bakeries.", sources=["P2"])]), llm)
+    assert not checked.supported and "too short to show what the figure refers to" in checked.reason
 
 
 def test_a_claim_without_a_verdict_is_rejected():
