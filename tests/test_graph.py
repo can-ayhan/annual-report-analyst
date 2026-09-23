@@ -48,6 +48,7 @@ def test_the_planner_sees_the_catalogue_and_the_analyst_sees_full_passages(searc
     prompts = dict(llm.asked)
     assert "- Baltic Mills, fiscal year 2025: Baltic Mills annual report 2025" in prompts["planner"]
     assert "Baltic Mills 2025, p. 1:" in prompts["retriever"]             # previews carry the citation
+    assert "- Baltic Mills, fiscal year 2025" in prompts["retriever"]     # and the names to use in a follow-up
     assert "compared with 390 a year earlier" in prompts["analyst"]
 
 
@@ -97,5 +98,23 @@ def test_the_retriever_can_ask_for_more(search):
     more = Review(enough=False, follow_up=[Search(query="dividend per share", company="Baltic Mills")])
     llm = ScriptedChat(planner=[first], retriever=[more], analyst=[Draft(cannot_answer=True)])
     state = ask("How many bakeries, and what dividend?", llm, search)
-    assert [s.query for s in state["searches_run"]] == ["number of bakeries", "dividend per share"]
+    assert [s.query for s in state["searches_run"]] == [
+        "number of bakeries", "How many bakeries, and what dividend?", "dividend per share"]
     assert {p.page_no for p in state["passages"]} >= {1, 3}
+
+
+def test_the_question_itself_is_searched_within_the_planned_report(search):
+    llm = ScriptedChat(planner=[PLAN], retriever=[ENOUGH], analyst=[Draft(cannot_answer=True)])
+    state = ask("What dividend per share is recommended?", llm, search)
+    planned, own_words = state["searches_run"]
+    assert own_words.query == "What dividend per share is recommended?"
+    assert (own_words.company, own_words.fiscal_year) == (planned.company, planned.fiscal_year)
+    assert 3 in {p.page_no for p in state["passages"]}        # the plan was about bakeries; the question finds the dividend
+
+
+def test_a_company_is_matched_to_the_name_in_the_library(search):
+    plan = Plan(searches=[Search(query="number of bakeries", company="Baltic Mills S.A.", fiscal_year=2025)])
+    llm = ScriptedChat(planner=[plan], retriever=[ENOUGH], analyst=[Draft(cannot_answer=True)])
+    state = ask("How many bakeries?", llm, search)
+    assert state["searches_run"][0].company == "Baltic Mills"
+    assert state["passages"]

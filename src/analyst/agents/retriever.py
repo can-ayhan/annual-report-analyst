@@ -1,11 +1,17 @@
 """Retriever: runs the planned searches, judges what came back and searches again if something is missing.
 
 It sees only the start of each passage. The full text goes to the analyst.
+
+Two things are done without asking a model, because both went wrong in real runs:
+a company name is matched to the name in the library ("InPost Group" is "InPost"),
+and the question itself is always one of the searches, since a planner's short
+query can miss the page that the user's own words find.
 """
 
 from __future__ import annotations
 
 from analyst.agents import prompts
+from analyst.agents.planner import catalogue_listing
 from analyst.agents.state import Passage, Review, Search, State
 from analyst.llm import ChatModel
 from analyst.search import Hit, ReportSearch
@@ -21,6 +27,28 @@ def describe(search: Search) -> str:
     return f'"{search.query}" in {scope}'
 
 
+def resolve_company(name: str | None, catalogue: list[dict]) -> str | None:
+    """The company as the library spells it. A name the library does not have is kept,
+    so that the search comes back empty instead of answering about someone else."""
+    if not name:
+        return None
+    wanted = name.strip().lower()
+    companies = list(dict.fromkeys(report["company"] for report in catalogue))
+    for company in companies:
+        if company.lower() == wanted:
+            return company
+    for company in companies:
+        if company.lower() in wanted or wanted in company.lower():
+            return company
+    return name
+
+
+def with_question(question: str, searches: list[Search]) -> list[Search]:
+    """The planned searches plus the question itself, once for every report they are aimed at."""
+    scopes = dict.fromkeys((search.company, search.fiscal_year) for search in searches)
+    return searches + [Search(query=question, company=company, fiscal_year=year) for company, year in scopes]
+
+
 def interleave(results: list[list[Hit]], limit: int) -> list[Hit]:
     """Best hit of every search first, then the second best of each, and so on, without repeats."""
     chosen: dict[int, Hit] = {}
@@ -32,12 +60,17 @@ def interleave(results: list[list[Hit]], limit: int) -> list[Hit]:
 
 
 def make_retriever(llm: ChatModel, search: ReportSearch):
-    def run(searches: list[Search]) -> list[list[Hit]]:
-        return [search.search(s.query, company=s.company, fiscal_year=s.fiscal_year, limit=PER_SEARCH)
-                for s in searches]
-
     def retriever(state: State) -> dict:
-        searches = list(state["plan"].searches)
+        catalogue = state["catalogue"]
+
+        def scoped(searches: list[Search]) -> list[Search]:
+            return [s.model_copy(update={"company": resolve_company(s.company, catalogue)}) for s in searches]
+
+        def run(searches: list[Search]) -> list[list[Hit]]:
+            return [search.search(s.query, company=s.company, fiscal_year=s.fiscal_year, limit=PER_SEARCH)
+                    for s in searches]
+
+        searches = with_question(state["question"], scoped(list(state["plan"].searches)))
         results = run(searches)
         calls = []
         if any(results):
@@ -45,13 +78,14 @@ def make_retriever(llm: ChatModel, search: ReportSearch):
                 f"- {hit.citation}: {' '.join(hit.text.split())[:PREVIEW_CHARS]}"
                 for hit in interleave(results, limit=MAX_PREVIEWS)
             )
-            user = (f"Question: {state['question']}\n\nSearches run:\n"
+            user = (f"Reports in the library:\n{catalogue_listing(catalogue)}\n\n"
+                    f"Question: {state['question']}\n\nSearches run:\n"
                     + "\n".join(f"- {describe(s)}" for s in searches)
                     + f"\n\nPassages found:\n{previews}")
             review, call = llm.structured("retriever", prompts.RETRIEVER, user, Review)
             calls.append(call)
             if not review.enough and review.follow_up:
-                more = review.follow_up[:2]
+                more = scoped(review.follow_up[:2])
                 searches += more
                 results += run(more)
         passages = [
