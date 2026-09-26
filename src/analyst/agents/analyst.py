@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from analyst.agents import prompts
-from analyst.agents.state import Checked, Draft, Passage, State
+from analyst.agents.state import Checked, Draft, Passage, QuotedDraft, State
 from analyst.llm import ChatModel
 
 
@@ -21,6 +21,7 @@ def feedback(checked: list[Checked]) -> str:
 
 def make_analyst(llm: ChatModel, variant: str = "baseline"):
     system = prompts.ANALYST[variant]
+    schema = QuotedDraft if variant == "quote_first" else Draft
 
     def analyst(state: State) -> dict:
         passages = state.get("passages") or []
@@ -30,7 +31,8 @@ def make_analyst(llm: ChatModel, variant: str = "baseline"):
         revising = bool(state.get("checked"))
         if revising:
             user += f"\n{prompts.REVISION}\nYour previous claims:\n{feedback(state['checked'])}"
-        draft, call = llm.structured("analyst", system, user, Draft)
+        result, call = llm.structured("analyst", system, user, schema)
+        draft = result.as_draft() if isinstance(result, QuotedDraft) else result
         update = {"draft": draft, "calls": [call]}
         if revising:
             update["revisions"] = state.get("revisions", 0) + 1

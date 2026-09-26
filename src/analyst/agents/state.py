@@ -58,6 +58,21 @@ class Draft(BaseModel):
     cannot_answer: bool = Field(default=False, description="True if the passages do not contain the answer")
 
 
+class QuotedClaim(BaseModel):
+    quote: str = Field(description="The sentence or table row copied from the passage, word for word")
+    text: str = Field(description="The claim that the quote supports, one sentence")
+    sources: list[str] = Field(description="Label of the passage the quote is from, e.g. ['P2']")
+
+
+class QuotedDraft(BaseModel):
+    claims: list[QuotedClaim] = Field(default_factory=list)
+    cannot_answer: bool = Field(default=False, description="True if the passages do not contain the answer")
+
+    def as_draft(self) -> Draft:
+        return Draft(claims=[Claim(text=claim.text, sources=claim.sources) for claim in self.claims],
+                     cannot_answer=self.cannot_answer)
+
+
 # -- verifier -----------------------------------------------------------------------------------------
 
 

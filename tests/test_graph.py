@@ -4,6 +4,8 @@ from analyst.agents.state import (
     Claim,
     Draft,
     Plan,
+    QuotedClaim,
+    QuotedDraft,
     Review,
     Search,
     Verdict,
@@ -118,3 +120,16 @@ def test_a_company_is_matched_to_the_name_in_the_library(search):
     state = ask("How many bakeries?", llm, search)
     assert state["searches_run"][0].company == "Baltic Mills"
     assert state["passages"]
+
+
+def test_the_quote_first_variant_uses_its_own_form(search):
+    probe = ask("x", ScriptedChat(planner=[PLAN], retriever=[ENOUGH], analyst=[Draft(cannot_answer=True)]), search)
+    p = label_of(probe, 1)
+    quoted = QuotedDraft(claims=[QuotedClaim(quote="the Group operated 412 bakeries",
+                                             text="Baltic Mills operated 412 bakeries.", sources=[p])])
+    llm = ScriptedChat(
+        planner=[PLAN], retriever=[ENOUGH], analyst=[quoted],
+        verifier=[Verification(verdicts=[Verdict(claim=1, supported=True, quote="the Group operated 412 bakeries")])],
+    )
+    state = ask("How many bakeries?", llm, search, variant="quote_first")
+    assert state["answer"].answered and state["draft"].claims[0].text == "Baltic Mills operated 412 bakeries."

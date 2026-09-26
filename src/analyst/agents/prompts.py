@@ -1,4 +1,7 @@
-"""The instructions each agent works under."""
+"""The instructions each agent works under.
+
+The analyst has three variants, compared in the evaluation. The other agents have one.
+"""
 
 from __future__ import annotations
 
@@ -33,6 +36,20 @@ change or a difference, give the figures it is based on, and give the change onl
 Leave out anything the passages do not say. If they do not contain the answer, return no claims and set
 cannot_answer.""",
 
+    "quote_first": """\
+You answer questions about company annual reports using only the passages provided.
+
+Work in two steps for every claim. First copy, word for word, the sentence or table row from a passage
+that contains the fact. Then write the claim that this quote supports: one sentence that can be checked
+on its own and names the company and the year it is about.
+Figures in the claim must be exactly those in the quote, with unit and scale as the passage gives them
+(if a table is in PLN thousands, say so). Do not round, convert or calculate. If the question asks for a
+change or a difference, give the figures it is based on, and give the change only if a passage states it.
+If no passage contains the answer, return no claims and set cannot_answer.""",
+
+    "minimal": """\
+Answer the question from the passages. Give the answer as claims, each with the passages it comes from.
+If the passages do not contain the answer, return no claims and set cannot_answer.""",
 }
 
 REVISION = """\
