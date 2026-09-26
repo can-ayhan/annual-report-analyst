@@ -24,7 +24,7 @@ log = logging.getLogger(__name__)
 T = TypeVar("T", bound=BaseModel)
 
 MAX_OUTPUT_TOKENS = 2000
-LONGEST_WAIT = 90           # seconds; a rate limit that asks for more is the daily allowance
+LONGEST_WAIT = 90           # seconds; a rate limit that asks for more is the daily allowance running out
 
 
 class LLMError(RuntimeError):
@@ -80,7 +80,7 @@ def tool_schema(schema: type[BaseModel]) -> dict:
 
 class GroqChat:
     def __init__(self, model: str, client=None, cache_dir: Path | None = None, options: dict | None = None,
-                 max_attempts: int = 6):
+                 max_attempts: int = 6, longest_wait: float = LONGEST_WAIT):
         if client is None:
             import groq
 
@@ -92,6 +92,7 @@ class GroqChat:
         self.cache_dir = cache_dir          # replays identical requests for free; used by the evaluation
         self.options = options or {}        # extra request fields for this model, e.g. reasoning_effort
         self.max_attempts = max_attempts
+        self.longest_wait = longest_wait
 
     # -- public ---------------------------------------------------------------------------------
 
@@ -157,7 +158,7 @@ class GroqChat:
                 )
             except groq.RateLimitError as exc:
                 wait = float(exc.response.headers.get("retry-after", 10))
-                if wait > LONGEST_WAIT or attempt == self.max_attempts:
+                if wait > self.longest_wait or attempt == self.max_attempts:
                     raise LLMError(f"{self.model}: rate limit, retry after {wait:.0f} s: {exc}") from exc
                 log.info("rate limit on %s, waiting %.0f s", self.model, wait)
                 time.sleep(wait + 0.5)
