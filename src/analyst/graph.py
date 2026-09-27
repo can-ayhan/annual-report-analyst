@@ -32,13 +32,18 @@ def after_verification(state: State) -> str:
 
 def finish(state: State) -> dict:
     by_label = {passage.label: passage for passage in state.get("passages") or []}
-    claims = [
-        AnswerClaim(text=claim.text, citations=[
-            Citation(report_id=p.report_id, company=p.company, fiscal_year=p.fiscal_year, page_no=p.page_no)
-            for p in (by_label[label] for label in claim.sources)
-        ])
-        for claim in state.get("checked", []) if claim.supported
-    ]
+    merged: dict[str, AnswerClaim] = {}       # a claim made twice from two passages is said once, citing both
+    for claim in state.get("checked", []):
+        if not claim.supported:
+            continue
+        key = " ".join(claim.text.split()).lower()
+        entry = merged.setdefault(key, AnswerClaim(text=claim.text, citations=[]))
+        for passage in (by_label[label] for label in claim.sources):
+            citation = Citation(report_id=passage.report_id, company=passage.company,
+                                fiscal_year=passage.fiscal_year, page_no=passage.page_no)
+            if citation not in entry.citations:
+                entry.citations.append(citation)
+    claims = list(merged.values())
     rejected = [claim for claim in state.get("checked", []) if not claim.supported]
     answer = Answer(question=state["question"], claims=claims, rejected=rejected, answered=bool(claims))
     return {"answer": answer}

@@ -44,6 +44,21 @@ def test_a_question_goes_through_all_four_agents(search):
     assert state.get("revisions", 0) == 0
 
 
+def test_a_claim_made_twice_is_said_once_with_both_pages(search):
+    probe = ask("x", ScriptedChat(planner=[PLAN], retriever=[ENOUGH], analyst=[Draft(cannot_answer=True)]), search)
+    first, other = probe["passages"][0].label, probe["passages"][1].label
+    llm = ScriptedChat(
+        planner=[PLAN], retriever=[ENOUGH],
+        analyst=[Draft(claims=[Claim(text="The report is the annual report of Baltic Mills.", sources=[first]),
+                               Claim(text="The report is the  annual report of Baltic Mills.", sources=[first, other])])],
+        verifier=[Verification(verdicts=[Verdict(claim=1, supported=True, quote="Baltic Mills S.A. Annual report"),
+                                         Verdict(claim=2, supported=True, quote="Baltic Mills S.A. Annual report")])],
+    )
+    answer = ask("Whose report is this?", llm, search)["answer"]
+    assert len(answer.claims) == 1
+    assert len(answer.claims[0].citations) == len({probe["passages"][0].page_no, probe["passages"][1].page_no})
+
+
 def test_the_planner_sees_the_catalogue_and_the_analyst_sees_full_passages(search):
     llm = ScriptedChat(planner=[PLAN], retriever=[ENOUGH], analyst=[Draft(cannot_answer=True)])
     ask("How many bakeries?", llm, search)
