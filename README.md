@@ -43,6 +43,13 @@ The same search and page tools are available to any MCP client:
 analyst mcp                       # serves list_reports, search_reports and get_page over stdio
 ```
 
-## Status
+## Evaluation
 
-Work in progress: steps 1 to 4 are done.
+`evals/questions.yml` has 18 questions with the expected figures and the pages that state them.
+`analyst eval --model NAME` runs them against a model and `analyst report` prints the saved runs.
+
+| Model | Prompt | Correct | Right page cited | Claims rejected | Tokens / question | Median model time | Cost per 100 questions |
+|---|---|---:|---:|---:|---:|---:|---:|
+| openai/gpt-oss-120b | baseline | 18/18 | 16/16 | 0 | 5,231 | 2.2 s | $0.101 |
+| openai/gpt-oss-20b | baseline | 17/18 | 15/16 | 2 | 5,135 | 1.7 s | $0.048 |
+| qwen/qwen3.8-27b | baseline | 17/18 | 15/16 | 0 | 6,209 | 2.0 s | $0.623 |

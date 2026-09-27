@@ -24,7 +24,7 @@ questions:
 
   - id: dino-ebitda
     question: What was the Dino Polska Group's EBITDA in 2025, and what was its EBITDA margin?
-    expect: [["2,546.3"], ["7.6"]]
+    expect: [["2,546.3", "2,546,313"], ["7.6"]]
     pages: {dino-2025: [16]}
 
   - id: dino-employees

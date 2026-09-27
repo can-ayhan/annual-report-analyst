@@ -1,0 +1,918 @@
+{
+ "summary": {
+  "model": "openai/gpt-oss-120b",
+  "variant": "baseline",
+  "questions": 18,
+  "correct": 18,
+  "accuracy": 1.0,
+  "cited": 16,
+  "answerable": 16,
+  "claims_rejected": 0,
+  "revisions": 1,
+  "tokens_per_question": 5231,
+  "median_seconds": 2.25,
+  "cost_per_100_questions_usd": 0.101
+ },
+ "questions": [
+  {
+   "id": "dino-stores",
+   "question": "How many stores did Dino Polska have at the end of 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "Dino Polska had 3,033 stores at the end of 2025. [Dino Polska 2025, p. 10; Dino Polska 2025, p. 23; Dino Polska 2025, p. 7]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 2,
+   "prompt_tokens": 4815,
+   "completion_tokens": 400,
+   "model_seconds": 2.02,
+   "cost_usd": 0.000962,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 532,
+     "completion_tokens": 78,
+     "seconds": 0.448,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1088,
+     "completion_tokens": 51,
+     "seconds": 0.408,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1710,
+     "completion_tokens": 134,
+     "seconds": 0.612,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1485,
+     "completion_tokens": 137,
+     "seconds": 0.553,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "dino-openings",
+   "question": "How many new stores did Dino Polska open in 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "Dino Polska opened 345 new stores in 2025. [Dino Polska 2025, p. 10]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 2,
+   "prompt_tokens": 4265,
+   "completion_tokens": 355,
+   "model_seconds": 2.05,
+   "cost_usd": 0.000853,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 530,
+     "completion_tokens": 76,
+     "seconds": 0.547,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 950,
+     "completion_tokens": 56,
+     "seconds": 0.353,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1889,
+     "completion_tokens": 106,
+     "seconds": 0.633,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 896,
+     "completion_tokens": 117,
+     "seconds": 0.519,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "dino-revenue",
+   "question": "What was the Dino Polska Group's sales revenue in 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "Dino Polska Group generated sales revenue of PLN 33,634.2 million in 2025. [Dino Polska 2025, p. 14]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 2,
+   "prompt_tokens": 4607,
+   "completion_tokens": 449,
+   "model_seconds": 2.25,
+   "cost_usd": 0.00096,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 531,
+     "completion_tokens": 72,
+     "seconds": 0.522,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1007,
+     "completion_tokens": 134,
+     "seconds": 0.679,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2337,
+     "completion_tokens": 104,
+     "seconds": 0.628,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 732,
+     "completion_tokens": 139,
+     "seconds": 0.417,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "dino-ebitda",
+   "question": "What was the Dino Polska Group's EBITDA in 2025, and what was its EBITDA margin?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "Dino Polska Group's EBITDA in 2025 was PLN 2,546,313 (thousands). [Dino Polska 2025, p. 16]\nDino Polska Group's EBITDA margin in 2025 was 7.6%. [Dino Polska 2025, p. 16]",
+   "claims_accepted": 2,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 5,
+   "prompt_tokens": 4612,
+   "completion_tokens": 639,
+   "model_seconds": 2.75,
+   "cost_usd": 0.001075,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 537,
+     "completion_tokens": 148,
+     "seconds": 0.528,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1124,
+     "completion_tokens": 148,
+     "seconds": 0.72,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2287,
+     "completion_tokens": 136,
+     "seconds": 0.736,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 664,
+     "completion_tokens": 207,
+     "seconds": 0.764,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "dino-employees",
+   "question": "How many employees did the Dino Polska Group have at the end of 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "Dino Polska Group had 55,856 employees at the end of 2025. [Dino Polska 2025, p. 82; Dino Polska 2025, p. 49; Dino Polska 2025, p. 81]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 2,
+   "prompt_tokens": 4923,
+   "completion_tokens": 439,
+   "model_seconds": 1.87,
+   "cost_usd": 0.001002,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 534,
+     "completion_tokens": 77,
+     "seconds": 0.276,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1021,
+     "completion_tokens": 61,
+     "seconds": 0.402,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2127,
+     "completion_tokens": 151,
+     "seconds": 0.549,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1241,
+     "completion_tokens": 150,
+     "seconds": 0.639,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "dino-dividend",
+   "question": "Does Dino Polska's Management Board plan to recommend a dividend for 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "Dino Polska's Management Board does not plan to recommend payment of a dividend for 2025 to the Shareholder Meeting. [Dino Polska 2025, p. 22]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 3900,
+   "completion_tokens": 521,
+   "model_seconds": 2.04,
+   "cost_usd": 0.000898,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 533,
+     "completion_tokens": 97,
+     "seconds": 0.382,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 962,
+     "completion_tokens": 192,
+     "seconds": 0.563,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1808,
+     "completion_tokens": 122,
+     "seconds": 0.48,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 597,
+     "completion_tokens": 110,
+     "seconds": 0.619,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "inpost-volume",
+   "question": "How many parcels did InPost Group handle in 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "InPost Group handled 1.4 billion parcels in 2025. [InPost 2025, p. 29; InPost 2025, p. 5]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 4583,
+   "completion_tokens": 526,
+   "model_seconds": 2.29,
+   "cost_usd": 0.001003,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 530,
+     "completion_tokens": 73,
+     "seconds": 0.43,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 941,
+     "completion_tokens": 130,
+     "seconds": 0.523,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2138,
+     "completion_tokens": 186,
+     "seconds": 0.9,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 974,
+     "completion_tokens": 137,
+     "seconds": 0.437,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "inpost-employees",
+   "question": "How many employees did InPost Group have at 31 December 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "InPost Group had 13,419 total employees at 31 December 2025. [InPost 2025, p. 287; InPost 2025, p. 190]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 5485,
+   "completion_tokens": 478,
+   "model_seconds": 3.13,
+   "cost_usd": 0.00111,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1045,
+     "completion_tokens": 76,
+     "seconds": 0.243,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1060,
+     "completion_tokens": 172,
+     "seconds": 1.086,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2263,
+     "completion_tokens": 109,
+     "seconds": 0.717,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1117,
+     "completion_tokens": 121,
+     "seconds": 1.081,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "inpost-revenue",
+   "question": "What was InPost Group's revenue for the twelve months of 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "InPost Group's revenue for the twelve months ended on 31 December 2025 was PLN 14,711.2 million. [InPost 2025, p. 240]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 4520,
+   "completion_tokens": 475,
+   "model_seconds": 2.32,
+   "cost_usd": 0.000963,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 533,
+     "completion_tokens": 78,
+     "seconds": 0.426,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 981,
+     "completion_tokens": 176,
+     "seconds": 0.78,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2258,
+     "completion_tokens": 114,
+     "seconds": 0.637,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 748,
+     "completion_tokens": 107,
+     "seconds": 0.476,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "inpost-uk-lockers",
+   "question": "How many lockers did InPost have in the UK at the end of 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "InPost had 13,721 lockers in the UK at the end of 2025. [InPost 2025, p. 32]\nInPost ended 2025 with 13,721 lockers in the UK. [InPost 2025, p. 6]",
+   "claims_accepted": 2,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 4351,
+   "completion_tokens": 616,
+   "model_seconds": 2.48,
+   "cost_usd": 0.001022,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 535,
+     "completion_tokens": 84,
+     "seconds": 0.536,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 764,
+     "completion_tokens": 133,
+     "seconds": 0.405,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2080,
+     "completion_tokens": 140,
+     "seconds": 0.738,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 972,
+     "completion_tokens": 259,
+     "seconds": 0.799,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "inpost-fcf",
+   "question": "What was InPost Group's free cash flow in 2025, and what was it in 2024?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "InPost Group's free cash flow in 2025 was PLN 84.1 million. [InPost 2025, p. 234]\nInPost Group's free cash flow in 2024 was PLN 934.5 million. [InPost 2025, p. 234]",
+   "claims_accepted": 2,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 4829,
+   "completion_tokens": 545,
+   "model_seconds": 2.08,
+   "cost_usd": 0.001051,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 540,
+     "completion_tokens": 160,
+     "seconds": 0.699,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1210,
+     "completion_tokens": 58,
+     "seconds": 0.354,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2342,
+     "completion_tokens": 167,
+     "seconds": 0.569,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 737,
+     "completion_tokens": 160,
+     "seconds": 0.46,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "cdp-revenue",
+   "question": "What sales revenue does the consolidated income statement of the CD PROJEKT Group show for 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "The consolidated income statement of the CD PROJEKT Group shows sales revenue of 866 989 PLN thousands for 2025. [CD PROJEKT 2025, p. 33]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 4350,
+   "completion_tokens": 454,
+   "model_seconds": 2.26,
+   "cost_usd": 0.000925,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 538,
+     "completion_tokens": 86,
+     "seconds": 0.388,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 981,
+     "completion_tokens": 144,
+     "seconds": 0.744,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2109,
+     "completion_tokens": 118,
+     "seconds": 0.681,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 722,
+     "completion_tokens": 106,
+     "seconds": 0.45,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "cdp-margin",
+   "question": "What was the CD PROJEKT Group's net profit margin in 2025, and what was it in 2024?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "CD PROJEKT Group's net profit margin in 2025 was 60.1%. [CD PROJEKT 2025, p. 36]\nCD PROJEKT Group's net profit margin in 2024 was 55.5%. [CD PROJEKT 2025, p. 36]",
+   "claims_accepted": 2,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 4635,
+   "completion_tokens": 585,
+   "model_seconds": 3.74,
+   "cost_usd": 0.001046,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 543,
+     "completion_tokens": 121,
+     "seconds": 0.53,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1386,
+     "completion_tokens": 62,
+     "seconds": 0.483,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2058,
+     "completion_tokens": 242,
+     "seconds": 2.131,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 648,
+     "completion_tokens": 160,
+     "seconds": 0.6,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "cdp-cyberpunk",
+   "question": "How many copies of Cyberpunk 2077 had been sold by November 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "CD PROJEKT RED announced that over 35 million copies of Cyberpunk 2077 had been sold by November 2025. [CD PROJEKT 2025, p. 18; CD PROJEKT 2025, p. 3; CD PROJEKT 2025, p. 6]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 4515,
+   "completion_tokens": 517,
+   "model_seconds": 2.32,
+   "cost_usd": 0.000987,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1047,
+     "completion_tokens": 117,
+     "seconds": 0.511,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 804,
+     "completion_tokens": 160,
+     "seconds": 0.652,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1596,
+     "completion_tokens": 111,
+     "seconds": 0.392,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1068,
+     "completion_tokens": 129,
+     "seconds": 0.765,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "cdp-2024-profit",
+   "question": "What net profit did CD PROJEKT S.A., the parent company, report for 2024 in its 2024 report?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "CD PROJEKT S.A. reported a Net Profit for 2024 of PLN 470 674 thousand. [CD PROJEKT 2024, p. 39; CD PROJEKT 2024, p. 38]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 2,
+   "prompt_tokens": 5275,
+   "completion_tokens": 400,
+   "model_seconds": 2.03,
+   "cost_usd": 0.001031,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 544,
+     "completion_tokens": 82,
+     "seconds": 0.432,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1121,
+     "completion_tokens": 47,
+     "seconds": 0.235,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2242,
+     "completion_tokens": 129,
+     "seconds": 0.626,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1368,
+     "completion_tokens": 142,
+     "seconds": 0.739,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "cross-employees",
+   "question": "Which had more employees at the end of 2025, the Dino Polska Group or InPost Group, and how many did each have?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "Dino Polska Group had 55,856 employees at the end of 2025. [Dino Polska 2025, p. 82]\nInPost Group had 13,419 employees at the end of 2025. [InPost 2025, p. 287]",
+   "claims_accepted": 2,
+   "claims_rejected": [],
+   "revisions": 1,
+   "searches": 6,
+   "prompt_tokens": 9168,
+   "completion_tokens": 1140,
+   "model_seconds": 4.39,
+   "cost_usd": 0.002059,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 545,
+     "completion_tokens": 125,
+     "seconds": 0.521,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1353,
+     "completion_tokens": 202,
+     "seconds": 0.607,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2420,
+     "completion_tokens": 212,
+     "seconds": 0.965,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1148,
+     "completion_tokens": 323,
+     "seconds": 1.077,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 2583,
+     "completion_tokens": 154,
+     "seconds": 0.809,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1119,
+     "completion_tokens": 124,
+     "seconds": 0.411,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "missing-allegro",
+   "question": "What was Allegro's gross merchandise value in 2025?",
+   "correct": true,
+   "cited": null,
+   "answered": false,
+   "answer": "The indexed reports do not contain an answer to this.",
+   "claims_accepted": 0,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 3366,
+   "completion_tokens": 260,
+   "model_seconds": 1.53,
+   "cost_usd": 0.000661,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 530,
+     "completion_tokens": 89,
+     "seconds": 0.48,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 972,
+     "completion_tokens": 121,
+     "seconds": 0.571,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1864,
+     "completion_tokens": 50,
+     "seconds": 0.479,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "missing-lpp",
+   "question": "How many stores did LPP operate at the end of 2025?",
+   "correct": true,
+   "cited": null,
+   "answered": false,
+   "answer": "The indexed reports do not contain an answer to this.",
+   "claims_accepted": 0,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 2864,
+   "completion_tokens": 294,
+   "model_seconds": 2.19,
+   "cost_usd": 0.000606,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 532,
+     "completion_tokens": 85,
+     "seconds": 0.495,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 873,
+     "completion_tokens": 136,
+     "seconds": 1.041,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-120b",
+     "prompt_tokens": 1459,
+     "completion_tokens": 73,
+     "seconds": 0.652,
+     "cached": true
+    }
+   ]
+  }
+ ]
+}
