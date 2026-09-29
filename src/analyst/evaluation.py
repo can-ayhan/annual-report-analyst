@@ -2,8 +2,8 @@
 
 Three things are measured per question:
 
-* correct   the expected figures are in the answer (or, for a question the library
-            cannot answer, the system said so);
+* correct   the expected figures are in the answer and none of the known wrong readings is
+            (or, for a question the library cannot answer, the system said so);
 * cited     the answer cites a page on which the figure is stated;
 * cost and time, from the tokens and the duration of every model call.
 """
@@ -34,6 +34,7 @@ class Question:
     id: str
     question: str
     expect: list[list[str]] = field(default_factory=list)
+    wrong: list[str] = field(default_factory=list)
     pages: dict[str, list[int]] = field(default_factory=dict)
     no_answer: bool = False
 
@@ -71,6 +72,7 @@ def score(question: Question, answer: Answer) -> dict:
         return {"correct": not answer.answered, "cited": None}
     text = comparable(" ".join(claim.text for claim in answer.claims))
     found = all(any(comparable(way) in text for way in group) for group in question.expect)
+    found = found and not any(comparable(reading) in text for reading in question.wrong)
     cited_pages = {(c.report_id, c.page_no) for claim in answer.claims for c in claim.citations}
     cited = all(
         any((report_id, page) in cited_pages for page in pages) for report_id, pages in question.pages.items()

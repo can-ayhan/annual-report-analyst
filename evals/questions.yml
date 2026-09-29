@@ -2,6 +2,8 @@
 #
 # expect    every group must be found in the answer; a group lists the accepted ways
 #           of writing the same thing (figures are compared without thousands separators)
+# wrong     readings that make the answer wrong although the figure is there: a table in
+#           PLN thousands read as millions
 # pages     per report, every PDF page that states the answer; the answer must cite
 #           at least one of them for each report listed
 # no_answer the library does not hold the answer and the system should say so
@@ -20,11 +22,13 @@ questions:
   - id: dino-revenue
     question: What was the Dino Polska Group's sales revenue in 2025?
     expect: [["33,634,155", "33,634.2", "33.6 billion"]]
+    wrong: ["33,634,155 million", "33,634.2 thousand"]
     pages: {dino-2025: [5, 14, 66]}
 
   - id: dino-ebitda
     question: What was the Dino Polska Group's EBITDA in 2025, and what was its EBITDA margin?
     expect: [["2,546.3", "2,546,313"], ["7.6"]]
+    wrong: ["2,546,313 million", "2,546.3 thousand"]
     pages: {dino-2025: [16]}
 
   - id: dino-employees
@@ -65,6 +69,7 @@ questions:
   - id: cdp-revenue
     question: What sales revenue does the consolidated income statement of the CD PROJEKT Group show for 2025?
     expect: [["866 989", "867.0 million", "867 million"]]
+    wrong: ["866 989 million"]
     pages: {cdprojekt-2025: [33]}
 
   - id: cdp-margin
@@ -80,6 +85,7 @@ questions:
   - id: cdp-2024-profit
     question: What net profit did CD PROJEKT S.A., the parent company, report for 2024 in its 2024 report?
     expect: [["470 674"]]
+    wrong: ["470 674 million"]
     pages: {cdprojekt-2024: [38, 39, 45, 49]}
 
   - id: cross-employees

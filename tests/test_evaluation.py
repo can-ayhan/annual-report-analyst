@@ -42,6 +42,14 @@ def test_wrong_figure():
     assert score(STORES, answer(("Dino had 2,688 stores.", "dino-2025", 10))) == {"correct": False, "cited": True}
 
 
+def test_the_right_figure_with_the_wrong_scale_is_wrong():
+    ebitda = Question(id="ebitda", question="EBITDA?", expect=[["2,546.3", "2,546,313"]],
+                      wrong=["2,546,313 million"], pages={"dino-2025": [16]})
+    assert score(ebitda, answer(("EBITDA was PLN 2,546,313 thousand.", "dino-2025", 16)))["correct"]
+    assert score(ebitda, answer(("EBITDA was PLN 2,546.3 million.", "dino-2025", 16)))["correct"]
+    assert not score(ebitda, answer(("EBITDA was PLN 2,546,313 million.", "dino-2025", 16)))["correct"]
+
+
 def test_every_expected_figure_is_needed():
     assert not score(TWO_FIGURES, answer(("FCF was PLN 84.1 m in 2025.", "inpost-2025", 38)))["correct"]
     both = answer(("FCF was PLN 84.1 m in 2025.", "inpost-2025", 38), ("It was PLN 934.5 m in 2024.", "inpost-2025", 38))
