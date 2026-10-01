@@ -55,3 +55,13 @@ analyst mcp                       # serves list_reports, search_reports and get_
 | qwen/qwen3.8-27b | baseline | 17/18 | 15/16 | 0 | 6,209 | 2.0 s | $0.623 |
 
 A right figure with the wrong scale counts as wrong: one model read a table in PLN thousands as millions.
+
+### Three ways of instructing the analyst
+
+The smallest model on eight of the questions, which is what one day of the free tier leaves room for:
+
+| Model | Prompt | Correct | Right page cited | Claims rejected | Tokens / question | Median model time | Cost per 100 questions |
+|---|---|---:|---:|---:|---:|---:|---:|
+| openai/gpt-oss-20b | baseline | 6/8 | 6/7 | 2 | 5,138 | 1.7 s | $0.049 |
+| openai/gpt-oss-20b | minimal | 6/8 | 6/7 | 2 | 5,020 | 1.7 s | $0.048 |
+| openai/gpt-oss-20b | quote_first | 8/8 | 7/7 | 0 | 5,311 | 2.1 s | $0.051 |

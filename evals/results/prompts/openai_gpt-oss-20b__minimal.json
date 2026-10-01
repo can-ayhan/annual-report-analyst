@@ -1,0 +1,435 @@
+{
+ "summary": {
+  "model": "openai/gpt-oss-20b",
+  "variant": "minimal",
+  "questions": 8,
+  "correct": 6,
+  "accuracy": 0.75,
+  "cited": 6,
+  "answerable": 7,
+  "claims_rejected": 2,
+  "revisions": 1,
+  "tokens_per_question": 5020,
+  "median_seconds": 1.68,
+  "cost_per_100_questions_usd": 0.048
+ },
+ "questions": [
+  {
+   "id": "dino-openings",
+   "question": "How many new stores did Dino Polska open in 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "In 2025 Dino Polska opened 345 new stores compared to 283 stores opened in 2024. [Dino Polska 2025, p. 10]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 5,
+   "prompt_tokens": 3828,
+   "completion_tokens": 406,
+   "model_seconds": 1.5,
+   "cost_usd": 0.000409,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 530,
+     "completion_tokens": 111,
+     "seconds": 0.347,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 967,
+     "completion_tokens": 121,
+     "seconds": 0.238,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1706,
+     "completion_tokens": 75,
+     "seconds": 0.482,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 625,
+     "completion_tokens": 99,
+     "seconds": 0.435,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "dino-ebitda",
+   "question": "What was the Dino Polska Group's EBITDA in 2025, and what was its EBITDA margin?",
+   "correct": false,
+   "cited": true,
+   "answered": true,
+   "answer": "The EBITDA in 2025 was PLN 2,546,313 million. [Dino Polska 2025, p. 16]\nThe EBITDA margin in 2025 was 7.6%. [Dino Polska 2025, p. 16]",
+   "claims_accepted": 2,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 5,
+   "prompt_tokens": 4269,
+   "completion_tokens": 504,
+   "model_seconds": 1.82,
+   "cost_usd": 0.000471,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 537,
+     "completion_tokens": 128,
+     "seconds": 0.406,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1124,
+     "completion_tokens": 111,
+     "seconds": 0.479,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1952,
+     "completion_tokens": 103,
+     "seconds": 0.49,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 656,
+     "completion_tokens": 162,
+     "seconds": 0.443,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "dino-dividend",
+   "question": "Does Dino Polska's Management Board plan to recommend a dividend for 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "The Company’s Management Board does not plan to recommend payment of a dividend for 2025 to the Shareholder Meeting. [Dino Polska 2025, p. 22]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 5,
+   "prompt_tokens": 4189,
+   "completion_tokens": 416,
+   "model_seconds": 1.79,
+   "cost_usd": 0.000439,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 533,
+     "completion_tokens": 107,
+     "seconds": 0.411,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1176,
+     "completion_tokens": 116,
+     "seconds": 0.466,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1883,
+     "completion_tokens": 82,
+     "seconds": 0.5,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 597,
+     "completion_tokens": 111,
+     "seconds": 0.411,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "inpost-fcf",
+   "question": "What was InPost Group's free cash flow in 2025, and what was it in 2024?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "InPost Group’s free cash flow for the 12 months ended 31‑12‑2025 was 84.1 million PLN. [InPost 2025, p. 234]\nInPost Group’s free cash flow for the 12 months ended 31‑12‑2024 was 934.5 million PLN. [InPost 2025, p. 234]",
+   "claims_accepted": 2,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 4647,
+   "completion_tokens": 504,
+   "model_seconds": 1.56,
+   "cost_usd": 0.0005,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 540,
+     "completion_tokens": 128,
+     "seconds": 0.213,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1127,
+     "completion_tokens": 62,
+     "seconds": 0.206,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 2225,
+     "completion_tokens": 138,
+     "seconds": 0.566,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 755,
+     "completion_tokens": 176,
+     "seconds": 0.577,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "cdp-revenue",
+   "question": "What sales revenue does the consolidated income statement of the CD PROJEKT Group show for 2025?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "The consolidated income statement of the CD PROJEKT Group shows sales revenue of 866,989 thousand PLN for 2025. [CD PROJEKT 2025, p. 33]",
+   "claims_accepted": 1,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 4226,
+   "completion_tokens": 348,
+   "model_seconds": 1.14,
+   "cost_usd": 0.000421,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 538,
+     "completion_tokens": 79,
+     "seconds": 0.222,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 979,
+     "completion_tokens": 106,
+     "seconds": 0.391,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1989,
+     "completion_tokens": 82,
+     "seconds": 0.31,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 720,
+     "completion_tokens": 81,
+     "seconds": 0.213,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "cdp-margin",
+   "question": "What was the CD PROJEKT Group's net profit margin in 2025, and what was it in 2024?",
+   "correct": false,
+   "cited": false,
+   "answered": false,
+   "answer": "The indexed reports do not contain an answer to this.",
+   "claims_accepted": 0,
+   "claims_rejected": [
+    {
+     "text": "The CD PROJEKT Group’s net profit margin was 60.1% in 2025.",
+     "reason": "accepted on the strength of '60.1%' alone, which is too short to show what the figure refers to"
+    },
+    {
+     "text": "The CD PROJEKT Group’s net profit margin was 55.5% in 2024.",
+     "reason": "accepted on the strength of '55.5%' alone, which is too short to show what the figure refers to"
+    }
+   ],
+   "revisions": 1,
+   "searches": 4,
+   "prompt_tokens": 7270,
+   "completion_tokens": 678,
+   "model_seconds": 2.73,
+   "cost_usd": 0.000749,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 543,
+     "completion_tokens": 120,
+     "seconds": 0.403,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1386,
+     "completion_tokens": 61,
+     "seconds": 0.535,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1940,
+     "completion_tokens": 119,
+     "seconds": 0.516,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 652,
+     "completion_tokens": 141,
+     "seconds": 0.406,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 2097,
+     "completion_tokens": 96,
+     "seconds": 0.459,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 652,
+     "completion_tokens": 141,
+     "seconds": 0.406,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "cross-employees",
+   "question": "Which had more employees at the end of 2025, the Dino Polska Group or InPost Group, and how many did each have?",
+   "correct": true,
+   "cited": true,
+   "answered": true,
+   "answer": "At the end of 2025, the Dino Polska Group had 55,856 employees. [Dino Polska 2025, p. 82]\nAt the end of 2025, the InPost Group had 13,419 employees. [InPost 2025, p. 287]",
+   "claims_accepted": 2,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 6,
+   "prompt_tokens": 5347,
+   "completion_tokens": 553,
+   "model_seconds": 2.09,
+   "cost_usd": 0.000567,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 545,
+     "completion_tokens": 144,
+     "seconds": 0.655,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1377,
+     "completion_tokens": 180,
+     "seconds": 0.575,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 2302,
+     "completion_tokens": 123,
+     "seconds": 0.431,
+     "cached": true
+    },
+    {
+     "agent": "verifier",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1123,
+     "completion_tokens": 106,
+     "seconds": 0.433,
+     "cached": true
+    }
+   ]
+  },
+  {
+   "id": "missing-lpp",
+   "question": "How many stores did LPP operate at the end of 2025?",
+   "correct": true,
+   "cited": null,
+   "answered": false,
+   "answer": "The indexed reports do not contain an answer to this.",
+   "claims_accepted": 0,
+   "claims_rejected": [],
+   "revisions": 0,
+   "searches": 4,
+   "prompt_tokens": 2747,
+   "completion_tokens": 226,
+   "model_seconds": 0.96,
+   "cost_usd": 0.000274,
+   "calls": [
+    {
+     "agent": "planner",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 532,
+     "completion_tokens": 89,
+     "seconds": 0.364,
+     "cached": true
+    },
+    {
+     "agent": "retriever",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 874,
+     "completion_tokens": 88,
+     "seconds": 0.329,
+     "cached": true
+    },
+    {
+     "agent": "analyst",
+     "model": "openai/gpt-oss-20b",
+     "prompt_tokens": 1341,
+     "completion_tokens": 49,
+     "seconds": 0.271,
+     "cached": true
+    }
+   ]
+  }
+ ]
+}
